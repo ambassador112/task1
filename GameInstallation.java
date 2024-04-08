@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameInstallation {
 
@@ -12,74 +14,37 @@ public class GameInstallation {
             gamesFolder.mkdirs();
         }
 
-        File srcFolder = new File(gamesFolder, "src");
-        srcFolder.mkdirs();
-        log.append(createFolderMessage(srcFolder));
-
-        File testFolder = new File(srcFolder, "test");
-        testFolder.mkdirs();
-        log.append(createFolderMessage(testFolder));
-
-        File mainFolder = new File(srcFolder, "main");
-        mainFolder.mkdirs();
-        log.append(createFolderMessage(mainFolder));
-
-        File mainJava = new File(mainFolder, "Main.java");
-        try {
-            mainJava.createNewFile();
-            log.append(createFileMessage(mainJava));
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<String> directoriesToCreate = new ArrayList<>();
+        directoriesToCreate.add("src");
+        directoriesToCreate.add("src/test");
+        directoriesToCreate.add("src/main");
+        directoriesToCreate.add("res");
+        directoriesToCreate.add("res/drawables");
+        directoriesToCreate.add("res/vectors");
+        directoriesToCreate.add("res/icons");
+        directoriesToCreate.add("savegames");
+        directoriesToCreate.add("temp");
+        
+        for (String directory : directoriesToCreate) {
+            createDirectory(gamesFolder.getAbsolutePath() + File.separator + directory, log);
         }
 
-        File utilsJava = new File(mainFolder, "Utils.java");
-        try {
-            utilsJava.createNewFile();
-            log.append(createFileMessage(utilsJava));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        File resFolder = new File(gamesFolder, "res");
-        resFolder.mkdirs();
-        log.append(createFolderMessage(resFolder));
-
-        File drawablesFolder = new File(resFolder, "drawables");
-        drawablesFolder.mkdirs();
-        log.append(createFolderMessage(drawablesFolder));
-
-        File vectorsFolder = new File(resFolder, "vectors");
-        vectorsFolder.mkdirs();
-        log.append(createFolderMessage(vectorsFolder));
-
-        File iconsFolder = new File(resFolder, "icons");
-        iconsFolder.mkdirs();
-        log.append(createFolderMessage(iconsFolder));
-
-        File saveGamesFolder = new File(gamesFolder, "savegames");
-        saveGamesFolder.mkdirs();
-        log.append(createFolderMessage(saveGamesFolder));
-
-        File tempFolder = new File(gamesFolder, "temp");
-        tempFolder.mkdirs();
-        log.append(createFolderMessage(tempFolder));
-
-        File tempTxt = new File(tempFolder, "temp.txt");
+        File tempTxt = new File("C:\\Новая папка\\temp\\temp.txt");
         try {
             tempTxt.createNewFile();
             log.append(createFileMessage(tempTxt));
+            writeLogToFile(log.toString(), tempTxt);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        writeLogToFile(log.toString(), tempTxt);
     }
 
-    private static String createFolderMessage(File folder) {
-        if (folder.exists()) {
-            return "Папка создана: " + folder.getAbsolutePath() + "\n";
+    private static void createDirectory(String path, StringBuilder log) {
+        File directory = new File(path);
+        if (directory.mkdirs()) {
+            log.append("Папка создана: ").append(directory.getAbsolutePath()).append("\n");
         } else {
-            return "Ошибка в создании папки: " + folder.getAbsolutePath() + "\n";
+            log.append("Ошибка в создании папки: ").append(directory.getAbsolutePath()).append("\n");
         }
     }
 
@@ -99,3 +64,4 @@ public class GameInstallation {
         }
     }
 }
+```
